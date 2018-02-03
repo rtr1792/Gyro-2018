@@ -11,7 +11,8 @@
 
 class Robot : public frc::IterativeRobot {
 public:
-	AHRS *ahrs;
+	AHRS *gyro;
+
 	frc::Talon frontLeft{1};
 	frc::Talon midLeft{2};
 	frc::Talon rearLeft{3};
@@ -21,11 +22,11 @@ public:
 	frc::Talon rearRight{6};
 	frc::SpeedControllerGroup right{frontRight, midRight, rearRight};
 	frc::DifferentialDrive drive{left, right};
-	double rotation;
-
+	//float rotation;
 	frc::DifferentialDrive DifferentialDrive { left, right };
-	void RobotInit() {
 
+	void RobotInit() {
+		gyro = new AHRS(SPI::Port::kMXP);
 	}
 	void AutonomousInit() override {
 
@@ -37,14 +38,19 @@ public:
 
 	}
 	void TeleopPeriodic() {
-	rotation = ahrs->GetYaw();
+//	double angle = gyro->GetAngle();
+		if (xbox.GetRawButton(1)){
+			 gyro->Reset();
+		}
+		frc::SmartDashboard::PutNumber("Gyro Angle", gyro->GetAngle());
+		frc::SmartDashboard::PutNumber("Name", 2.0);
 	}
 	void TestPeriodic() {
-		frc::SmartDashboard::PutNumber("Vertical_Rotation", rotation);
-		frc::SmartDashboard::PutNumber("Name", 2.0);
+
 	}
 private:
 	frc::Joystick stick {0};
+	frc::XboxController xbox {1};
 	frc::LiveWindow& m_lw = *LiveWindow::GetInstance();
 	frc::SendableChooser<std::string> m_chooser;
 	const std::string kAutoNameDefault = "Default";
