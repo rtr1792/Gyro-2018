@@ -8,10 +8,12 @@
 #include <WPILib.h>
 #include <Joystick.h>
 #include <AHRS.h>
+#include <PIDController.h>
 
 class Robot : public frc::IterativeRobot {
 public:
 	AHRS *ahrs;
+	frc::Talon PIDTest{7};
 	frc::Talon frontLeft{1};
 	frc::Talon midLeft{2};
 	frc::Talon rearLeft{3};
@@ -21,11 +23,15 @@ public:
 	frc::Talon rearRight{6};
 	frc::SpeedControllerGroup right{frontRight, midRight, rearRight};
 	frc::DifferentialDrive drive{left, right};
+	double Kp = 0.05;
+	double Ki = 0.00;
+	double Kd = 0.00;
+	double Kf = 0.00;
 	double rotation;
 
 	frc::DifferentialDrive DifferentialDrive { left, right };
 	void RobotInit() {
-
+		ahrs = new AHRS(SPI::Port::kMXP);
 	}
 	void AutonomousInit() override {
 
@@ -34,10 +40,13 @@ public:
 
 	}
 	void TeleopInit() {
+		PIDController::PIDController(Kp, Ki, Kd, Kf, PIDTest, PIDTest, 0.01);
+
+
 
 	}
 	void TeleopPeriodic() {
-	rotation = ahrs->GetYaw();
+	//rotation = ahrs->GetYaw();
 	}
 	void TestPeriodic() {
 		frc::SmartDashboard::PutNumber("Vertical_Rotation", rotation);
