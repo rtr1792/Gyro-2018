@@ -38,10 +38,60 @@ private:
 	WPI_TalonSRX *srx5;  //right
 	WPI_TalonSRX *srx6;
 
+	WPI_TalonSRX *intake1; //intake motor (left?)
+	WPI_TalonSRX *intake2; //intake motor (right?)
+
+	WPI_TalonSRX *lift1; //lift motor (top?)
+	WPI_TalonSRX *lift2; //lift motor (bottom?)
+
 	AHRS *ahrs;  //for te gyro
 
 public:
 	auto2();
+};
+
+class auto3 {
+private:
+	WPI_TalonSRX *srx1;  //has enc
+	WPI_TalonSRX *srx2;  //left
+	WPI_TalonSRX *srx3;
+
+	WPI_TalonSRX *srx4;  //has enc
+	WPI_TalonSRX *srx5;  //right
+	WPI_TalonSRX *srx6;
+
+	WPI_TalonSRX *intake1; //intake motor (left?)
+	WPI_TalonSRX *intake2; //intake motor (right?)
+
+	WPI_TalonSRX *lift1; //lift motor (top?)
+	WPI_TalonSRX *lift2; //lift motor (bottom?)
+
+	AHRS *ahrs;  //for te gyro
+
+public:
+	auto3();
+};
+
+class auto4 {
+private:
+	WPI_TalonSRX *srx1;  //has enc
+	WPI_TalonSRX *srx2;  //left
+	WPI_TalonSRX *srx3;
+
+	WPI_TalonSRX *srx4;  //has enc
+	WPI_TalonSRX *srx5;  //right
+	WPI_TalonSRX *srx6;
+
+	WPI_TalonSRX *intake1; //intake motor (left?)
+	WPI_TalonSRX *intake2; //intake motor (right?)
+
+	WPI_TalonSRX *lift1; //lift motor (top?)
+	WPI_TalonSRX *lift2; //lift motor (bottom?)
+
+	AHRS *ahrs;  //for te gyro
+
+public:
+	auto4();
 };
 
 
