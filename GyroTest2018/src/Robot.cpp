@@ -14,9 +14,8 @@
 class Robot : public frc::IterativeRobot {
 public:
 	Robot() {
-		this->AutoManager = new AutoManager();
+		this->autoManager = new AutoManager();
 	}
-	AutoManager *AutoManager;
 	//AHRS *ahrs;
 	frc::Talon PIDTest{7};
 	frc::Talon frontLeft{1};
@@ -42,6 +41,7 @@ public:
 
 	}
 	void AutonomousPeriodic() {
+		this->autoManager->Auto1();
 
 	}
 	void TeleopInit() {
@@ -57,7 +57,7 @@ public:
 	//	frc::SmartDashboard::
 	}
 private:
-
+	AutoManager *autoManager;
 	frc::Joystick stick {0};
 	frc::LiveWindow& m_lw = *LiveWindow::GetInstance();
 	frc::SendableChooser<std::string> m_chooser;

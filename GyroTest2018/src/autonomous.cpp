@@ -13,40 +13,7 @@
 #include "math.h"
 
 //Crosses the baseline, nothing more
-void AutoManager::Auto1() {
-	srx1 = new WPI_TalonSRX(1);
-	srx2 = new WPI_TalonSRX(2);  //left
-	srx3 = new WPI_TalonSRX(3);
-
-	srx4 = new WPI_TalonSRX(4);
-	srx5 = new WPI_TalonSRX(5);  //right
-	srx6 = new WPI_TalonSRX(6);
-
-	pi = 3.141592653589793238462643383279502884;
-	constant = 1024/pi;
-
-if(srx1->GetSensorCollection().GetQuadraturePosition() < 190 * constant){
-	srx1->Set(.3);
-	srx2->Set(.3);  //left side set to 50% speed
-	srx3->Set(.3);
-
-	srx4->Set(.3);
-	srx5->Set(.3);  //right side set to 50% speed
-	srx6->Set(.3);
-}
-	else {
-	srx1->Set(0);
-	srx2->Set(0);  //left side stop
-	srx3->Set(0);
-
-	srx4->Set(0);
-	srx5->Set(0);  //right side stop
-	srx6->Set(0);
-	}
-}
-
-//starts on left side, delivers cube to switch when on the same side
-void AutoManager::Auto2() {
+AutoManager::AutoManager() {
 	srx1 = new WPI_TalonSRX(1);
 	srx2 = new WPI_TalonSRX(2);  //left drive
 	srx3 = new WPI_TalonSRX(3);
@@ -66,6 +33,62 @@ void AutoManager::Auto2() {
 
 	ahrs = new AHRS(SPI::Port::kMXP); //also for te gyro
 	ahrs->Reset();
+}
+
+void AutoManager::Auto1() {
+/*	srx1 = new WPI_TalonSRX(1);
+	srx2 = new WPI_TalonSRX(2);  //left
+	srx3 = new WPI_TalonSRX(3);
+
+	srx4 = new WPI_TalonSRX(4);
+	srx5 = new WPI_TalonSRX(5);  //right
+	srx6 = new WPI_TalonSRX(6);
+
+	pi = 3.141592653589793238462643383279502884;
+	constant = 1024/pi; */
+
+if(srx1->GetSensorCollection().GetQuadraturePosition() < 190 * constant){
+	srx1->Set(.3);
+	srx2->Set(.3);  //left side set to 50% speed
+	srx3->Set(.3);
+
+	srx4->Set(.3);
+	srx5->Set(.3);  //right side set to 50% speed
+	srx6->Set(.3);
+}
+	else {
+	srx1->Set(0);
+	srx2->Set(0);  //left side stop
+	srx3->Set(0);
+
+	srx4->Set(0);
+	srx5->Set(0);  //right side stop
+	srx6->Set(0);
+	}
+frc::SmartDashboard::PutNumber("encoder rotation", srx1->GetSensorCollection().GetQuadraturePosition());
+}
+
+//starts on left side, delivers cube to switch when on the same side
+void AutoManager::Auto2() {
+/*	srx1 = new WPI_TalonSRX(1);
+	srx2 = new WPI_TalonSRX(2);  //left drive
+	srx3 = new WPI_TalonSRX(3);
+
+	srx4 = new WPI_TalonSRX(4);
+	srx5 = new WPI_TalonSRX(5);  //right drive
+	srx6 = new WPI_TalonSRX(6);
+
+	intake1 = new WPI_TalonSRX(7); //intake
+	intake2 = new WPI_TalonSRX(8);
+
+	lift1 = new WPI_TalonSRX(9); //lift
+	lift2 = new WPI_TalonSRX(10);
+
+	pi = 3.141592653589793238462643383279502884;
+	constant = 1024/pi;
+
+	ahrs = new AHRS(SPI::Port::kMXP); //also for te gyro
+	ahrs->Reset(); */
 if(srx1->GetSensorCollection().GetQuadraturePosition()){
 		srx1->Set(.5);
 		srx2->Set(.5);  //left side set to 50% speed
@@ -131,7 +154,7 @@ if(ahrs->GetAngle() < 89.5 and srx1->GetSensorCollection().GetQuadraturePosition
 
 //start in rightmost position, deliver cube to same side
 void AutoManager::Auto3() {
-	srx1 = new WPI_TalonSRX(1);
+/*	srx1 = new WPI_TalonSRX(1);
 	srx2 = new WPI_TalonSRX(2);  //left drive
 	srx3 = new WPI_TalonSRX(3);
 
@@ -149,7 +172,7 @@ void AutoManager::Auto3() {
 	constant = 1024/pi;
 
 	ahrs = new AHRS(SPI::Port::kMXP); //also for te gyro
-	ahrs->Reset();
+	ahrs->Reset(); */
 if(srx1->GetSensorCollection().GetQuadraturePosition()){
 		srx1->Set(.5);
 		srx2->Set(.5);  //left side set to 50% speed
@@ -215,7 +238,7 @@ if(srx1->GetSensorCollection().GetQuadraturePosition()){
 
 //start in middle, deliver to right side of switch
 void AutoManager::Auto4() {
-	srx1 = new WPI_TalonSRX(1);
+/*	srx1 = new WPI_TalonSRX(1);
 	srx2 = new WPI_TalonSRX(2);  //left drive
 	srx3 = new WPI_TalonSRX(3);
 
@@ -233,7 +256,7 @@ void AutoManager::Auto4() {
 	constant = 1024/pi;
 
 	ahrs = new AHRS(SPI::Port::kMXP); //also for te gyro
-	ahrs->Reset();
+	ahrs->Reset(); */
 if(srx1->GetSensorCollection().GetQuadraturePosition()){
 		srx1->Set(.5);
 		srx2->Set(.5);  //left side set to 50% speed

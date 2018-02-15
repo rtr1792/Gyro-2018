@@ -12,7 +12,6 @@
 
 #ifndef SRC_AUTONOMOUS_H_
 #define SRC_AUTONOMOUS_H_
-//#define PI 3.141592653589793238462643383279502884
 
 class AutoManager {
 private:
