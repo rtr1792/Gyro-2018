@@ -42,7 +42,6 @@ public:
 	}
 	void AutonomousPeriodic() {
 		this->autoManager->Auto1();
-
 	}
 	void TeleopInit() {
 		//PIDController::PIDController(Kp, Ki, Kd, Kf, PIDTest, PIDTest, 0.01);
@@ -55,8 +54,10 @@ public:
 	//	frc::SmartDashboard::PutNumber("Vertical_Rotation", rotation);
 	//	frc::SmartDashboard::PutNumber("Name", 2.0);
 	//	frc::SmartDashboard::
+
 	}
 private:
+
 	AutoManager *autoManager;
 	frc::Joystick stick {0};
 	frc::LiveWindow& m_lw = *LiveWindow::GetInstance();
