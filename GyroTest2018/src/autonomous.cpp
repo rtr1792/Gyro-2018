@@ -11,6 +11,7 @@
 #include <Talon.h>
 #include "autonomous.h"
 #include "math.h"
+#include <Timer.h>
 
 //Crosses the baseline, nothing more
 AutoManager::AutoManager() {
@@ -25,36 +26,54 @@ AutoManager::AutoManager() {
 	intake1 = new WPI_TalonSRX(7); //intake
 	intake2 = new WPI_TalonSRX(8);
 
-	lift1 = new WPI_TalonSRX(9); //lift
-	lift2 = new WPI_TalonSRX(10);
+	liftSRX1 = new WPI_TalonSRX(9); //lift
+	liftSRX2 = new WPI_TalonSRX(10);
 
 	pi = 3.141592653589793238462643383279502884;
 	constant = 1024/pi;
 
-	ahrs = new AHRS(SPI::Port::kMXP); //also for te gyro
+	timer = new Timer();
+
+	ahrs = new AHRS(SPI::Port::kMXP); //also for ta gyro
 	ahrs->Reset();
+
 
 //srx1->GetSensorCollection().SetQuadraturePosition(0,100);
 }
 
 void AutoManager::Auto1() {
-srx1->GetSensorCollection().SetQuadraturePosition(0,0);
 frc::SmartDashboard::PutNumber("encoder rotation", srx1->GetSensorCollection().GetQuadraturePosition());
 
-if(srx1->GetSensorCollection().GetQuadraturePosition() < 40 * constant){
-	intake1->Set(.2);
-	intake2->Set(.2);
-}
+//frc::SmartDashboard::PutNumber("time since start", timer->Get());
 
-if(srx1->GetSensorCollection().GetQuadraturePosition() < 190 * constant){
-	srx1->Set(.3);
-	srx2->Set(.3);  //left side set to 30% speed
-	srx3->Set(.3);
+frc::SmartDashboard::PutNumber("time since start", timer->Get());
 
-	srx4->Set(.3);
-	srx5->Set(.3);  //right side set to 30% speed
-	srx6->Set(.3);
+	timer->Start();
+	timer->Get();
+//after 15 seconds, reset the timer to zero
+if(timer->Get() >= 15) {
+		timer->Reset();
+		srx1->GetSensorCollection().SetQuadraturePosition(0,0);
+  }
+// run the lift until 2 seconds have passed
+if(timer->Get() <= 2) {
+	liftSRX1->Set(.3);
+	liftSRX2->Set(.3);
 }
+else {
+	liftSRX1->Set(0);
+	liftSRX2->Set(0);
+}
+// go forward from 2 to 5 seconds
+if((srx1->GetSensorCollection().GetQuadraturePosition() < 190 * constant) and timer->Get() > 2 and timer->Get() < 5 ) {
+	srx1->Set(.1);
+	srx2->Set(.1);  //left side set to 10% speed
+	srx3->Set(.1);
+
+	srx4->Set(.1);
+	srx5->Set(.1);  //right side set to 10% speed
+	srx6->Set(.1);
+  }
 	else {
 	srx1->Set(0);
 	srx2->Set(0);  //left side stop
@@ -64,6 +83,28 @@ if(srx1->GetSensorCollection().GetQuadraturePosition() < 190 * constant){
 	srx5->Set(0);  //right side stop
 	srx6->Set(0);
 	}
+//turn right from 5 seconds and beyond
+if(timer->Get() > 5 ) {
+	srx1->Set(.1);
+	srx2->Set(.1);  //left side set to 10% speed
+	srx3->Set(.1);
+
+	srx4->Set(-.1);
+	srx5->Set(-.1);  //right side set to 10% speed
+	srx6->Set(-.1);
+  }
+	else {
+	srx1->Set(0);
+	srx2->Set(0);  //left side stop
+	srx3->Set(0);
+
+	srx4->Set(0);
+	srx5->Set(0);  //right side stop
+	srx6->Set(0);
+	}
+
+
+
 }
 
 //starts on left side, delivers cube to switch when on the same side
@@ -78,8 +119,8 @@ if(srx1->GetSensorCollection().GetQuadraturePosition()){
 		srx5->Set(.5);  //right side set to 50% speed
 		srx6->Set(.5);
 
-		lift1->Set(.1);
-		lift2->Set(.1);
+		liftSRX1->Set(.1);
+		liftSRX2->Set(.1);
 }
 	else {
 		srx1->Set(0);
@@ -144,8 +185,8 @@ if(srx1->GetSensorCollection().GetQuadraturePosition()){
 		srx5->Set(.5);  //right side set to 50% speed
 		srx6->Set(.5);
 
-		lift1->Set(.1);
-		lift2->Set(.1);
+		liftSRX1->Set(.1);
+		liftSRX2->Set(.1);
 	}
 	else {
 		srx1->Set(0);
@@ -210,8 +251,8 @@ if(srx1->GetSensorCollection().GetQuadraturePosition()){
 		srx5->Set(.5);  //right side set to 50% speed
 		srx6->Set(.5);
 
-		lift1->Set(.1);
-		lift2->Set(.1);
+		liftSRX1->Set(.1);
+		liftSRX2->Set(.1);
 	}
 	else {
 		srx1->Set(0);

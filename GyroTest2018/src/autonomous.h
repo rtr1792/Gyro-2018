@@ -9,6 +9,7 @@
 #include <ctre/Phoenix.h>
 #include <Joystick.h>
 #include <Talon.h>
+#include <Timer.h>
 
 #ifndef SRC_AUTONOMOUS_H_
 #define SRC_AUTONOMOUS_H_
@@ -26,13 +27,15 @@ private:
 	WPI_TalonSRX *intake1; //intake motor (left?)
 	WPI_TalonSRX *intake2; //intake motor (right?)
 
-	WPI_TalonSRX *lift1; //lift motor (top?)
-	WPI_TalonSRX *lift2; //lift motor (bottom?)
+	WPI_TalonSRX *liftSRX1; //lift motor (top?)
+	WPI_TalonSRX *liftSRX2; //lift motor (bottom?)
 
 	AHRS *ahrs;
 
 	double pi;
 	double constant;
+
+	Timer *timer;
 
 public:
 	AutoManager();
