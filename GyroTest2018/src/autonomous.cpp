@@ -15,6 +15,28 @@
 
 //Crosses the baseline, nothing more
 AutoManager::AutoManager() {
+
+	double kTimeoutMs = 10;
+	double kPIDLoopIdx = 0;
+
+	liftSRX2->Set(ControlMode::Follower, 10);
+	liftSRX1->ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
+	liftSRX1->SetSensorPhase(true);
+	liftSRX1->SetInverted(false);
+	liftSRX1->ConfigAllowableClosedloopError(kPIDLoopIdx, 0, kTimeoutMs);
+
+	/* set the peak and nominal outputs, 12V means full */
+	srx1->ConfigNominalOutputForward(0, kTimeoutMs);
+	srx1->ConfigNominalOutputReverse(0, kTimeoutMs);
+	srx1->ConfigPeakOutputForward(12, kTimeoutMs);
+	srx1->ConfigPeakOutputReverse(-1 , kTimeoutMs);
+
+	/* set closed loop gains in slot0 */
+	srx1->Config_kF(kPIDLoopIdx, 0.0, kTimeoutMs);
+	srx1->Config_kP(kPIDLoopIdx, 0.1, kTimeoutMs);
+	srx1->Config_kI(kPIDLoopIdx, 0.0, kTimeoutMs);
+	srx1->Config_kD(kPIDLoopIdx, 0.0, kTimeoutMs);
+
 	srx1 = new WPI_TalonSRX(1);
 	srx2 = new WPI_TalonSRX(2);  //left drive
 	srx3 = new WPI_TalonSRX(3);
@@ -26,8 +48,8 @@ AutoManager::AutoManager() {
 	intake1 = new WPI_TalonSRX(7); //intake
 	intake2 = new WPI_TalonSRX(8);
 
-	liftSRX1 = new WPI_TalonSRX(9); //lift
-	liftSRX2 = new WPI_TalonSRX(10);
+	liftSRX1 = new WPI_TalonSRX(10); //has encoder, master
+	liftSRX2 = new WPI_TalonSRX(11); // no encoder, follower
 
 	pi = 3.141592653589793238462643383279502884;
 	constant = 1024/pi;
@@ -57,15 +79,14 @@ if(timer->Get() >= 15) {
   }
 // run the lift until 2 seconds have passed
 if(timer->Get() <= 2) {
-	liftSRX1->Set(.3);
-	liftSRX2->Set(.3);
+	liftSRX1->Set(ControlMode::Position, 10000); //Switch Height
 }
 else {
 	liftSRX1->Set(0);
 	liftSRX2->Set(0);
 }
 // go forward from 2 to 5 seconds
-if((srx1->GetSensorCollection().GetQuadraturePosition() < 190 * constant) and timer->Get() > 2 and timer->Get() < 5 ) {
+if((srx1->GetSensorCollection().GetQuadraturePosition() < 130 * constant) and timer->Get() > 2 and timer->Get() < 5 ) {
 	srx1->Set(.1);
 	srx2->Set(.1);  //left side set to 10% speed
 	srx3->Set(.1);
@@ -84,14 +105,14 @@ if((srx1->GetSensorCollection().GetQuadraturePosition() < 190 * constant) and ti
 	srx6->Set(0);
 	}
 //turn right from 5 seconds and beyond
-if(timer->Get() > 5 ) {
-	srx1->Set(.1);
-	srx2->Set(.1);  //left side set to 10% speed
-	srx3->Set(.1);
+if(timer->Get() > 5 and ahrs->GetPitch() < 90 ) {
+	srx1->Set(-.1);
+	srx2->Set(-.1);  //left side set to 10% speed
+	srx3->Set(-.1);
 
-	srx4->Set(-.1);
-	srx5->Set(-.1);  //right side set to 10% speed
-	srx6->Set(-.1);
+	srx4->Set(.1);
+	srx5->Set(.1);  //right side set to 10% speed
+	srx6->Set(.1);
   }
 	else {
 	srx1->Set(0);
